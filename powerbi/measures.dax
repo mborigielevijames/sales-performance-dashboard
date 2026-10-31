@@ -1,0 +1,102 @@
+// =====================================================================
+// measures.dax: create these in a dedicated table called "_Measures"
+// (Home > Enter data > name it _Measures, then New measure for each block)
+// Model: fact_sales (many) -> dim_date, dim_product, dim_customer, dim_country (one)
+// =====================================================================
+
+// ---------- Core revenue --------------------------------------------
+Gross Revenue =
+CALCULATE ( SUM ( fact_sales[revenue] ), fact_sales[transaction_type] = "Sale" )
+
+Returns Value =
+-CALCULATE ( SUM ( fact_sales[revenue] ), fact_sales[transaction_type] = "Return" )
+
+Net Revenue = SUM ( fact_sales[revenue] )          // returns are stored as negative values
+
+Return Rate % = DIVIDE ( [Returns Value], [Gross Revenue] )
+
+// ---------- Orders, units, basket ------------------------------------
+Orders =
+CALCULATE ( DISTINCTCOUNT ( fact_sales[invoice_no] ), fact_sales[transaction_type] = "Sale" )
+
+Units Sold =
+CALCULATE ( SUM ( fact_sales[quantity] ), fact_sales[transaction_type] = "Sale" )
+
+Avg Order Value = DIVIDE ( [Gross Revenue], [Orders] )
+
+Units per Order = DIVIDE ( [Units Sold], [Orders] )
+
+// ---------- Customers (registered only; customer_key 0 = guest) -------
+Active Customers =
+CALCULATE (
+    DISTINCTCOUNT ( fact_sales[customer_key] ),
+    fact_sales[transaction_type] = "Sale",
+    fact_sales[customer_key] <> 0
+)
+
+New Customers =
+VAR _start = MIN ( dim_date[date] )
+VAR _end   = MAX ( dim_date[date] )
+RETURN
+    CALCULATE (
+        DISTINCTCOUNT ( fact_sales[customer_key] ),
+        fact_sales[transaction_type] = "Sale",
+        fact_sales[customer_key] <> 0,
+        FILTER (
+            fact_sales,
+            RELATED ( dim_customer[first_order_date] ) >= _start
+                && RELATED ( dim_customer[first_order_date] ) <= _end
+        )
+    )
+
+Returning Customers = [Active Customers] - [New Customers]
+
+Returning Customer % = DIVIDE ( [Returning Customers], [Active Customers] )
+
+Net Revenue per Customer =
+DIVIDE (
+    CALCULATE ( [Net Revenue], fact_sales[customer_key] <> 0 ),
+    [Active Customers]
+)
+
+Guest Revenue Share % =
+DIVIDE ( CALCULATE ( [Net Revenue], dim_customer[customer_type] = "Guest" ),
+         CALCULATE ( [Net Revenue], ALL ( dim_customer ) ) )
+
+// ---------- Time intelligence ------------------------------------------
+// dim_date must be marked as a date table on [date]
+Net Revenue Previous Month =
+CALCULATE ( [Net Revenue], DATEADD ( dim_date[date], -1, MONTH ) )
+
+Net Revenue MoM % =
+VAR _prev = [Net Revenue Previous Month]
+RETURN
+    IF (
+        SELECTEDVALUE ( dim_date[is_complete_month] ) = 1,    // hide the partial Dec-2011
+        DIVIDE ( [Net Revenue] - _prev, _prev )
+    )
+
+Cumulative Net Revenue =
+CALCULATE ( [Net Revenue], FILTER ( ALL ( dim_date[date] ), dim_date[date] <= MAX ( dim_date[date] ) ) )
+
+// ---------- Share, rank, Pareto ------------------------------------------
+Net Revenue % of Total =
+DIVIDE ( [Net Revenue], CALCULATE ( [Net Revenue], ALLSELECTED () ) )
+
+Product Rank =
+RANKX ( ALLSELECTED ( dim_product[description] ), [Net Revenue], , DESC, DENSE )
+
+// Use on a column+line chart with dim_product[description] sorted by [Net Revenue] desc
+Pareto Cumulative % =
+VAR _current  = [Net Revenue]
+VAR _products = ADDCOLUMNS ( ALLSELECTED ( dim_product[description] ), "@rev", [Net Revenue] )
+VAR _cum      = SUMX ( FILTER ( _products, [@rev] >= _current ), [@rev] )
+VAR _total    = SUMX ( _products, [@rev] )
+RETURN DIVIDE ( _cum, _total )
+
+// ---------- Formatting helpers ------------------------------------------
+Revenue Label =
+VAR _v = [Net Revenue]
+RETURN SWITCH ( TRUE (), ABS ( _v ) >= 1000000, FORMAT ( _v / 1000000, "£0.00" ) & "M",
+                         ABS ( _v ) >= 1000,    FORMAT ( _v / 1000, "£0" ) & "K",
+                         FORMAT ( _v, "£0" ) )

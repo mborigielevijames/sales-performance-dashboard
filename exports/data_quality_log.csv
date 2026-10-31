@@ -1,0 +1,8 @@
+step,description,row_count,value
+0 raw,Rows loaded from source file,541909,9747747.93
+1 dedup,Rows after removing exact duplicates,536641,9726006.95
+x 1 Bad-debt accounting adjustment,Excluded: Bad-debt accounting adjustment,3,-11062.06
+"x 2 Non-product code (postage, fees, manual, vouchers)","Excluded: Non-product code (postage, fees, manual, vouchers)",2986,-33850.7
+x 3 Zero/negative unit price,Excluded: Zero/negative unit price,2480,0.0
+x 6 Fully reversed bulk order (entry error),Excluded: Fully reversed bulk order (entry error),4,0.0
+9 kept,Rows kept for the fact table (sales + returns),531168,9770919.71

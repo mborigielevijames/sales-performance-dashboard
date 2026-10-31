@@ -1,0 +1,39 @@
+region,country,net_revenue,pct_of_total,orders,avg_order_value,revenue_rank
+United Kingdom,United Kingdom,8280992.0,84.75,17899,473.68,1
+Europe (ex-UK),Netherlands,283480.0,2.9,93,3052.57,2
+Europe (ex-UK),EIRE,259380.0,2.65,282,960.46,3
+Europe (ex-UK),Germany,200620.0,2.05,443,463.61,4
+Europe (ex-UK),France,182077.0,1.86,382,482.97,5
+Asia-Pacific,Australia,136923.0,1.4,56,2466.14,6
+Europe (ex-UK),Switzerland,52483.0,0.54,50,1061.31,7
+Europe (ex-UK),Spain,51747.0,0.53,88,633.03,8
+Europe (ex-UK),Belgium,36663.0,0.38,98,376.81,9
+Asia-Pacific,Japan,35420.0,0.36,19,1969.28,10
+Europe (ex-UK),Sweden,35166.0,0.36,34,1083.2,11
+Europe (ex-UK),Norway,32293.0,0.33,32,1014.21,12
+Europe (ex-UK),Portugal,26807.0,0.27,50,539.02,13
+Europe (ex-UK),Channel Islands,19926.0,0.2,25,799.9,14
+Europe (ex-UK),Finland,18304.0,0.19,40,458.62,15
+Europe (ex-UK),Denmark,18042.0,0.18,18,1011.74,16
+Europe (ex-UK),Italy,15276.0,0.16,35,452.01,17
+Europe (ex-UK),Cyprus,12844.0,0.13,14,940.51,18
+Asia-Pacific,Hong Kong,9733.0,0.1,7,1392.03,19
+Asia-Pacific,Singapore,9120.0,0.09,4,2280.1,20
+Europe (ex-UK),Austria,8698.0,0.09,17,514.28,21
+Middle East,Israel,7902.0,0.08,8,1016.18,22
+Europe (ex-UK),Poland,6853.0,0.07,19,367.09,23
+Unspecified,Unspecified,4741.0,0.05,13,364.69,24
+Europe (ex-UK),Greece,4426.0,0.05,5,885.1,25
+Europe (ex-UK),Iceland,4310.0,0.04,7,615.71,26
+Americas & Africa,Canada,3115.0,0.03,5,623.09,27
+Europe (ex-UK),Malta,1980.0,0.02,5,414.12,28
+Middle East,United Arab Emirates,1865.0,0.02,2,932.39,29
+Americas & Africa,USA,1731.0,0.02,5,716.08,30
+Middle East,Lebanon,1694.0,0.02,1,1693.88,31
+Europe (ex-UK),Lithuania,1661.0,0.02,4,415.26,32
+Europe (ex-UK),European Community,1151.0,0.01,3,386.42,33
+Americas & Africa,Brazil,1144.0,0.01,1,1143.6,34
+Americas & Africa,RSA,1002.0,0.01,1,1002.31,35
+Europe (ex-UK),Czech Republic,672.0,0.01,2,393.37,36
+Middle East,Bahrain,548.0,0.01,3,251.38,37
+Middle East,Saudi Arabia,131.0,0.0,1,145.92,38
